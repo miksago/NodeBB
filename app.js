@@ -131,7 +131,7 @@ function start() {
 				// if (schema_ok || nconf.get('check-schema') === false) {
 					sockets.init(webserver.server);
 					// plugins.init();
-					// translator.loadServer();
+					translator.loadServer();
 
 					nconf.set('url', nconf.get('base_url') + (nconf.get('use_port') ? ':' + nconf.get('port') : '') + nconf.get('relative_path'));
 					nconf.set('base_templates_path', path.join(nconf.get('themes_path'), 'nodebb-theme-vanilla/templates'));

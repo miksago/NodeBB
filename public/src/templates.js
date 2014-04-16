@@ -71,7 +71,7 @@
 	}
 
 	function replace(template, key, value) {
-		var searchRegex = new RegExp('{' + key + '}', 'g');
+ 		var searchRegex = new RegExp('{' + key + '}', 'g');
 		console.log('HERE');
 		return template.replace(searchRegex, value);
 	}

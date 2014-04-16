@@ -25,7 +25,7 @@ var templates = require('./../../public/src/templates'),
 
 var middleware = {};
 
-
+// FIXME: This shouldn't use async.each
 function routeThemeScreenshots(app, themes) {
 	var	screenshotPath;
 
@@ -172,9 +172,6 @@ module.exports = function(app, data) {
 	middleware = require('./middleware')(app);
 
 	// app.engine('tpl', templates.__express);
-	// app.set('view engine', 'tpl');
-	// app.set('views', nconf.get('views_dir'));
-
 	// app.use(compress());
 
 	// app.use(favicon(path.join(__dirname, '../../', 'public', meta.config['brand:favicon'] ? meta.config['brand:favicon'] : 'favicon.ico')));
@@ -201,12 +198,12 @@ module.exports = function(app, data) {
 	// 	next();
 	// });
 
-	// app.use(middleware.processRender);
+	app.use(middleware.processRender);
 
 	// auth.initialize(app);
 
-	// routeCurrentTheme(app, data.currentThemeData);
-	// routeThemeScreenshots(app, data.themesData);
+	routeCurrentTheme(app, data.currentThemeData);
+	routeThemeScreenshots(app, data.themesData);
 
 	// plugins.getTemplates(function(err, pluginTemplates) {
 	// 	compileTemplates(pluginTemplates);

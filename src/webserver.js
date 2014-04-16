@@ -45,7 +45,16 @@ if(nconf.get('ssl')) {
 			db.getObjectFields('config', ['theme:type', 'theme:id', 'theme:staticDir', 'theme:templates'], next);
 		}
 	}, function(err, data) {
+
+		
+
+		app.engine('tpl', require('./../public/src/templates').__express);
+		app.set('view engine', 'tpl');
+		app.set('views', nconf.get('views_dir'));
+
 		middleware = middleware(app, data);
+
+
 		routes(app, middleware);
 		winston.info('Routes Added');
 
