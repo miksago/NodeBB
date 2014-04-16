@@ -1,6 +1,7 @@
 "use strict";
 
-var path = require('path'),
+var express = require('express'),
+	path = require('path'),
 	async = require('async'),
 	fs = require('fs'),
 	nconf = require('nconf'),
@@ -154,20 +155,24 @@ function getRecentPosts(req, res, next) {
 	});
 }
 
-module.exports =  function(app, middleware, controllers) {
-	app.namespace('/api', function () {
-		app.get('/config', controllers.api.getConfig);
+function apiRouter(middleware, controllers){
+	var router = express.Router();
 
-		app.get('/user/uid/:uid', middleware.checkGlobalPrivacySettings, controllers.accounts.getUserByUID);
-		app.get('/get_templates_listing', getTemplatesListing);
-		app.get('/categories/:cid/moderators', getModerators);
-		app.get('/recent/posts/:term?', getRecentPosts);
+	router.use(middleware.updateLastOnlineTime);
+	router.use(middleware.prepareAPI);
 
-		app.post('/post/upload', uploadPost);
-		app.post('/topic/thumb/upload', uploadThumb);
-	});
+	router.get('/config', controllers.api.getConfig);
 
-	// this should be in the API namespace
-	// also, perhaps pass in :userslug so we can use checkAccountPermissions middleware - in future will allow admins to upload a picture for a user
-	app.post('/user/uploadpicture', middleware.authenticate, middleware.checkGlobalPrivacySettings, /*middleware.checkAccountPermissions,*/ controllers.accounts.uploadPicture);
+	// router.get('/user/uid/:uid', middleware.checkGlobalPrivacySettings, controllers.accounts.getUserByUID);
+	// router.get('/get_templates_listing', getTemplatesListing);
+	// router.get('/categories/:cid/moderators', getModerators);
+	// router.get('/recent/posts/:term?', getRecentPosts);
+
+	// router.post('/post/upload', uploadPost);
+	// router.post('/topic/thumb/upload', uploadThumb);
+
+	return router;
 };
+
+module.exports = apiRouter;
+

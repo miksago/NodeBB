@@ -16,8 +16,7 @@
   },
   "dependencies": {
     "socket.io": "~0.9.16",
-    "express": "3.2.0",
-    "express-namespace": "~0.1.1",
+    "express": "4.0.0",
     "passport": "~0.2.0",
     "passport-local": "0.1.6",
     "marked": "0.2.8",
@@ -54,7 +53,8 @@
     "express-session": "^1.0.2",
     "csurf": "^1.1.0",
     "compression": "^1.0.1",
-    "connect-redis": "^2.0.0"
+    "connect-redis": "^2.0.0",
+    "morgan": "^1.0.0"
   },
   "optionalDependencies": {
     "redis": "0.8.3",

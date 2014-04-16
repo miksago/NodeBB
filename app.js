@@ -120,38 +120,38 @@ function start() {
 		meta.configs.init(function () {
 			var templates = require('./public/src/templates'),
 				translator = require('./public/src/translator'),
-				webserver = require('./src/webserver'),
-				sockets = require('./src/socket.io'),
-				plugins = require('./src/plugins'),
-				upgrade = require('./src/upgrade');
+				webserver = require('./src/webserver');
+				// sockets = require('./src/socket.io'),
+				// plugins = require('./src/plugins'),
+				// upgrade = require('./src/upgrade');
 
 			templates.setGlobal('relative_path', nconf.get('relative_path'));
 
-			upgrade.check(function(schema_ok) {
-				if (schema_ok || nconf.get('check-schema') === false) {
-					sockets.init(webserver.server);
-					plugins.init();
-					translator.loadServer();
+			// upgrade.check(function(schema_ok) {
+				// if (schema_ok || nconf.get('check-schema') === false) {
+					// sockets.init(webserver.server);
+					// plugins.init();
+					// translator.loadServer();
 
 					nconf.set('url', nconf.get('base_url') + (nconf.get('use_port') ? ':' + nconf.get('port') : '') + nconf.get('relative_path'));
 					nconf.set('base_templates_path', path.join(nconf.get('themes_path'), 'nodebb-theme-vanilla/templates'));
 					nconf.set('theme_templates_path', meta.config['theme:templates'] ? path.join(nconf.get('themes_path'), meta.config['theme:id'], meta.config['theme:templates']) : nconf.get('base_templates_path'));
 
-					plugins.ready(function() {
+					// plugins.ready(function() {
 						webserver.init();
-					});
+					// });
 
 					process.on('SIGTERM', shutdown);
 					process.on('SIGINT', shutdown);
 					process.on('SIGHUP', restart);
-				} else {
-					winston.warn('Your NodeBB schema is out-of-date. Please run the following command to bring your dataset up to spec:');
-					winston.warn('    node app --upgrade');
-					winston.warn('To ignore this error (not recommended):');
-					winston.warn('    node app --no-check-schema');
-					process.exit();
-				}
-			});
+				// } else {
+			// 		winston.warn('Your NodeBB schema is out-of-date. Please run the following command to bring your dataset up to spec:');
+			// 		winston.warn('    node app --upgrade');
+			// 		winston.warn('To ignore this error (not recommended):');
+			// 		winston.warn('    node app --no-check-schema');
+			// 		process.exit();
+			// 	}
+			// });
 		});
 	});
 }

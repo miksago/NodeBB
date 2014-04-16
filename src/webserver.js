@@ -2,7 +2,6 @@ var path = require('path'),
 	fs = require('fs'),
 	nconf = require('nconf'),
 	express = require('express'),
-	express_namespace = require('express-namespace'),
 	WebServer = express(),
 	server,
 	winston = require('winston'),
@@ -10,12 +9,12 @@ var path = require('path'),
 
 	emailer = require('./emailer'),
 	db = require('./database'),
-	auth = require('./routes/authentication'),
+	// auth = require('./routes/authentication'),
 	meta = require('./meta'),
 	user = require('./user'),
 	notifications = require('./notifications'),
 	plugins = require('./plugins'),
-	middleware = require('./middleware'),
+	middleware = require('./middleware/middleware'),
 	routes = require('./routes'),
 	emitter = require('./emitter'),
 
@@ -35,10 +34,10 @@ if(nconf.get('ssl')) {
 
 	var	port = nconf.get('PORT') || nconf.get('port');
 
-	auth.registerApp(app);
-	emailer.registerApp(app);
-	notifications.init();
-	user.startJobs();
+	// auth.registerApp(app);
+	// emailer.registerApp(app);
+	// notifications.init();
+	// user.startJobs();
 
 	async.series({
 		themesData: meta.themes.get,
@@ -48,6 +47,9 @@ if(nconf.get('ssl')) {
 	}, function(err, data) {
 		middleware = middleware(app, data);
 		routes(app, middleware);
+		winston.info('Routes Added');
+
+		emitter.emit('templates:compiled');
 
 		if (err) {
 			winston.error('Errors were encountered while attempting to initialise NodeBB.');
@@ -88,10 +90,10 @@ if(nconf.get('ssl')) {
 	}
 
 	// Front-end assets
-	plugins.ready(function() {
-		meta.js.minify(app.enabled('minification'));
-		meta.css.minify();
-	});
+	// plugins.ready(function() {
+	// 	meta.js.minify(app.enabled('minification'));
+	// 	meta.css.minify();
+	// });
 
 	module.exports.server = server;
 	module.exports.init = function () {

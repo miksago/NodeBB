@@ -212,14 +212,14 @@ module.exports = function(app, data) {
 		compileTemplates(pluginTemplates);
 	});
 
-	app.use(nconf.get('relative_path'), app.router);
+	// app.use(nconf.get('relative_path'), app.router);
 
 	app.use(nconf.get('relative_path'), express.static(path.join(__dirname, '../../', 'public'), {
 		maxAge: app.enabled('cache') ? 5184000000 : 0
 	}));
 
-	app.use(catch404);
-	app.use(handleErrors);
+	// app.use(catch404);
+	// app.use(handleErrors);
 
 	return middleware;
 };

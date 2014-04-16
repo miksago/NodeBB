@@ -17,7 +17,7 @@
 
 	try {
 		redis = require('redis');
-		connectRedis = require('connect-redis')(session);
+		connectRedis = require('connect-redis')({ session: session });
 		reds = require('reds');
 	} catch (err) {
 		winston.error('Unable to initialize Redis! Is Redis installed? Error :' + err.message);
