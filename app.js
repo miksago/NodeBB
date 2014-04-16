@@ -120,8 +120,8 @@ function start() {
 		meta.configs.init(function () {
 			var templates = require('./public/src/templates'),
 				translator = require('./public/src/translator'),
-				webserver = require('./src/webserver');
-				// sockets = require('./src/socket.io'),
+				webserver = require('./src/webserver'),
+				sockets = require('./src/socket.io');
 				// plugins = require('./src/plugins'),
 				// upgrade = require('./src/upgrade');
 
@@ -129,7 +129,7 @@ function start() {
 
 			// upgrade.check(function(schema_ok) {
 				// if (schema_ok || nconf.get('check-schema') === false) {
-					// sockets.init(webserver.server);
+					sockets.init(webserver.server);
 					// plugins.init();
 					// translator.loadServer();
 

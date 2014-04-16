@@ -163,13 +163,67 @@ function apiRouter(middleware, controllers){
 
 	router.get('/config', controllers.api.getConfig);
 
-	// router.get('/user/uid/:uid', middleware.checkGlobalPrivacySettings, controllers.accounts.getUserByUID);
-	// router.get('/get_templates_listing', getTemplatesListing);
-	// router.get('/categories/:cid/moderators', getModerators);
-	// router.get('/recent/posts/:term?', getRecentPosts);
+	router.get('/user/uid/:uid', middleware.checkGlobalPrivacySettings, controllers.accounts.getUserByUID);
+	router.get('/get_templates_listing', getTemplatesListing);
+	router.get('/categories/:cid/moderators', getModerators);
+	router.get('/recent/posts/:term?', getRecentPosts);
 
-	// router.post('/post/upload', uploadPost);
-	// router.post('/topic/thumb/upload', uploadThumb);
+	router.post('/post/upload', uploadPost);
+	router.post('/topic/thumb/upload', uploadThumb);
+
+
+
+	// Core Routes:
+	router.get('/home', controllers.home);
+	router.get('/login', middleware.redirectToAccountIfLoggedIn, controllers.login);
+	router.get('/register', middleware.redirectToAccountIfLoggedIn, controllers.register);
+	router.get('/confirm/:code', controllers.confirmEmail);
+	router.get('/outgoing', controllers.outgoing);
+	router.get('/search/:term?', middleware.guestSearchingAllowed, controllers.search);
+	router.get('/reset/:code?', controllers.reset);
+
+	// Static API Routes:
+	router.get('/404', controllers.static['404']);
+	router.get('/403', controllers.static['403']);
+	router.get('/500', controllers.static['500']);
+
+	// Topic API Routes: 
+	router.get('/topic/:topic_id/:slug?', controllers.topics.get);
+
+
+	// Category API Routes:
+	router.get('/popular/:set?', controllers.categories.popular);
+	router.get('/recent/:term?', controllers.categories.recent);
+	router.get('/unread/', middleware.authenticate, controllers.categories.unread);
+	router.get('/unread/total', middleware.authenticate, controllers.categories.unreadTotal);
+	router.get('/category/:category_id/:slug?', controllers.categories.get);
+
+
+ 	// Account Routes
+	router.get('/notifications', middleware.authenticate, controllers.accounts.getNotifications);
+	
+	router.get('/user/:userslug', middleware.checkGlobalPrivacySettings, controllers.accounts.getAccount);
+	router.get('/user/:userslug/following', middleware.checkGlobalPrivacySettings, controllers.accounts.getFollowing);
+	router.get('/user/:userslug/followers', middleware.checkGlobalPrivacySettings, controllers.accounts.getFollowers);
+	router.get('/user/:userslug/favourites', middleware.checkGlobalPrivacySettings, middleware.checkAccountPermissions, controllers.accounts.getFavourites);
+	router.get('/user/:userslug/posts', middleware.checkGlobalPrivacySettings, controllers.accounts.getPosts);
+	router.get('/user/:userslug/topics', middleware.checkGlobalPrivacySettings, controllers.accounts.getTopics);
+	router.get('/user/:userslug/edit', middleware.checkGlobalPrivacySettings, middleware.checkAccountPermissions, controllers.accounts.accountEdit);
+
+	// todo: admin recently gained access to this page, pls check if it actually works
+	router.get('/user/:userslug/settings', middleware.checkGlobalPrivacySettings, middleware.checkAccountPermissions, controllers.accounts.accountSettings);
+
+// User Routes
+	router.get('/users', middleware.checkGlobalPrivacySettings, controllers.users.getOnlineUsers);
+	
+	// was this duped by accident or purpose?
+	router.get('/users/online', middleware.checkGlobalPrivacySettings, controllers.users.getOnlineUsers);
+
+	router.get('/users/sort-posts', middleware.checkGlobalPrivacySettings, controllers.users.getUsersSortedByPosts);
+	router.get('/users/sort-reputation', middleware.checkGlobalPrivacySettings, controllers.users.getUsersSortedByReputation);
+	router.get('/users/latest', middleware.checkGlobalPrivacySettings, controllers.users.getUsersSortedByJoinDate);
+
+	router.get('/users/search', middleware.checkGlobalPrivacySettings, controllers.users.getUsersForSearch);
 
 	return router;
 };

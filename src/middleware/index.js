@@ -171,52 +171,52 @@ function catch404(req, res, next) {
 module.exports = function(app, data) {
 	middleware = require('./middleware')(app);
 
-	app.engine('tpl', templates.__express);
-	app.set('view engine', 'tpl');
-	app.set('views', nconf.get('views_dir'));
+	// app.engine('tpl', templates.__express);
+	// app.set('view engine', 'tpl');
+	// app.set('views', nconf.get('views_dir'));
 
-	app.use(compress());
+	// app.use(compress());
 
-	app.use(favicon(path.join(__dirname, '../../', 'public', meta.config['brand:favicon'] ? meta.config['brand:favicon'] : 'favicon.ico')));
-	app.use(nconf.get('relative_path') + '/apple-touch-icon', middleware.routeTouchIcon);
+	// app.use(favicon(path.join(__dirname, '../../', 'public', meta.config['brand:favicon'] ? meta.config['brand:favicon'] : 'favicon.ico')));
+	// app.use(nconf.get('relative_path') + '/apple-touch-icon', middleware.routeTouchIcon);
 
-	app.use(bodyParser());
-	app.use(cookieParser());
+	// app.use(bodyParser());
+	// app.use(cookieParser());
 
-	app.use(session({
-		store: db.sessionStore,
-		secret: nconf.get('secret'),
-		key: 'express.sid',
-		cookie: {
-			maxAge: 1000 * 60 * 60 * 24 * parseInt(meta.configs.loginDays || 14, 10)
-		}
-	}));
+	// app.use(session({
+	// 	store: db.sessionStore,
+	// 	secret: nconf.get('secret'),
+	// 	key: 'express.sid',
+	// 	cookie: {
+	// 		maxAge: 1000 * 60 * 60 * 24 * parseInt(meta.configs.loginDays || 14, 10)
+	// 	}
+	// }));
 
-	app.use(csrf()); // todo, make this a conditional middleware
+	// app.use(csrf()); // todo, make this a conditional middleware
 
-	app.use(function (req, res, next) {
-		res.locals.csrf_token = req.session._csrf;
-		res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-		res.setHeader('X-Powered-By', 'NodeBB');
-		next();
-	});
+	// app.use(function (req, res, next) {
+	// 	res.locals.csrf_token = req.session._csrf;
+	// 	res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+	// 	res.setHeader('X-Powered-By', 'NodeBB');
+	// 	next();
+	// });
 
-	app.use(middleware.processRender);
+	// app.use(middleware.processRender);
 
-	auth.initialize(app);
+	// auth.initialize(app);
 
-	routeCurrentTheme(app, data.currentThemeData);
-	routeThemeScreenshots(app, data.themesData);
+	// routeCurrentTheme(app, data.currentThemeData);
+	// routeThemeScreenshots(app, data.themesData);
 
-	plugins.getTemplates(function(err, pluginTemplates) {
-		compileTemplates(pluginTemplates);
-	});
+	// plugins.getTemplates(function(err, pluginTemplates) {
+	// 	compileTemplates(pluginTemplates);
+	// });
 
-	// app.use(nconf.get('relative_path'), app.router);
+	// // app.use(nconf.get('relative_path'), app.router);
 
-	app.use(nconf.get('relative_path'), express.static(path.join(__dirname, '../../', 'public'), {
-		maxAge: app.enabled('cache') ? 5184000000 : 0
-	}));
+	// app.use(nconf.get('relative_path'), express.static(path.join(__dirname, '../../', 'public'), {
+	// 	maxAge: app.enabled('cache') ? 5184000000 : 0
+	// }));
 
 	// app.use(catch404);
 	// app.use(handleErrors);

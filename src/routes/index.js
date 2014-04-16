@@ -142,6 +142,9 @@ function appRouter(middleware, controllers){
 
 module.exports = function(app, middleware) {
 	app.use(morgan({ immediate: true, format: 'dev' }));
+	
+	app.use(middleware.processRender);
+
 	app.use(nconf.get('relative_path'), appRouter(middleware, controllers));
 
 	// app.namespace(nconf.get('relative_path'), function() {
